@@ -186,48 +186,88 @@ test('la app funciona de punta a punta bajo /cuentos-de-bruno/', { skip: !chromi
   }
 });
 
-test('lectura en voz alta: reproducir, pausar, seguir y detener (voz en español simulada)', { skip: !chromium && 'Playwright no está instalado' }, async () => {
+function mockVoices(voices) {
+  return (list) => {
+    const spoken = [];
+    window.__spoken = spoken;
+    window.SpeechSynthesisUtterance = function (text) { this.text = text; };
+    const synth = {
+      getVoices() { return list; },
+      speak(u) {
+        spoken.push({ text: u.text, lang: u.lang, voice: u.voice && u.voice.name, rate: u.rate, pitch: u.pitch, t: performance.now() });
+        setTimeout(() => u.onend && u.onend(), 120);
+      },
+      cancel() {}, pause() {}, resume() {}, addEventListener() {}, onvoiceschanged: null
+    };
+    Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true });
+  };
+}
+
+async function openStoryWithVoices(browser, url, voices) {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await context.addInitScript(mockVoices(), voices);
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(String(e)));
+  await page.goto(url);
+  await page.click('[data-world="vecindad"]');
+  await page.click('[data-length="largo"]');
+  await page.click('#btn-create');
+  await page.locator('.choice-btn').first().waitFor();
+  return { page, errors };
+}
+
+test('lectura en voz alta: mejor voz, ritmo de narrador, pausas y velocidad', { skip: !chromium && 'Playwright no está instalado' }, async () => {
   const server = createServer();
   await new Promise((r) => server.listen(0, r));
   const url = 'http://localhost:' + server.address().port + BASE;
   const browser = await chromium.launch();
   try {
-    const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
-    await context.addInitScript(() => {
-      const spoken = [];
-      window.__spoken = spoken;
-      window.SpeechSynthesisUtterance = function (text) { this.text = text; };
-      const synth = {
-        getVoices() { return [{ lang: 'en-US', name: 'Inglés' }, { lang: 'es-AR', name: 'Español Argentina' }]; },
-        speak(u) { spoken.push({ text: u.text, lang: u.lang, voice: u.voice && u.voice.name }); setTimeout(() => u.onend && u.onend(), 250); },
-        cancel() {}, pause() {}, resume() {}, addEventListener() {}, onvoiceschanged: null
-      };
-      Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true });
-    });
-    const page = await context.newPage();
-    const errors = [];
-    page.on('pageerror', (e) => errors.push(String(e)));
-    await page.goto(url);
-    await page.click('[data-world="vecindad"]');
-    await page.click('[data-length="corto"]');
-    await page.click('#btn-create');
-    await page.locator('.choice-btn').first().waitFor();
-    assert.equal(await page.locator('#voice-note').isHidden(), true, 'con voz en español no hay aviso');
+    const { page, errors } = await openStoryWithVoices(browser, url, [
+      { name: 'English', lang: 'en-US', voiceURI: 'en' },
+      { name: 'Spanish basic', lang: 'es-ES', voiceURI: 'es-basic' },
+      { name: 'Google español de Estados Unidos', lang: 'es-US', voiceURI: 'google-es-us' }
+    ]);
+    assert.equal(await page.locator('#voice-note').isHidden(), true, 'con voz natural no hay aviso');
     await page.click('#btn-play');
-    assert.equal(await page.locator('#btn-pause').isEnabled(), true);
+    await page.waitForFunction(() => window.__spoken.length >= 4);
     await page.click('#btn-pause');
     assert.match(await page.locator('#btn-play').innerText(), /Seguir/);
-    const before = await page.evaluate(() => window.__spoken.length);
+    let spoken = await page.evaluate(() => window.__spoken);
+    assert.ok(spoken.every((u) => u.voice === 'Google español de Estados Unidos' && u.lang === 'es-US'), 'usa la voz de Google');
+    assert.ok(spoken.every((u) => u.rate > 0.91 && u.rate < 0.96), 'velocidad de cuento: ' + spoken[0].rate);
+    assert.match(spoken[0].text, /^Capítulo 1\./, 'empieza por el capítulo');
+    assert.ok(spoken.every((u) => u.text.length <= 230), 'habla oración por oración');
+    assert.ok(spoken[1].t - spoken[0].t >= 120 + 800, 'pausa larga después del título');
+    assert.ok(spoken[2].t - spoken[1].t >= 120 + 200, 'pausa entre oraciones');
+    assert.ok(spoken.every((u) => !/\p{Extended_Pictographic}/u.test(u.text)), 'no lee emojis');
+
+    // Velocidad lenta: se guarda y se aplica al seguir.
+    await page.click('[data-speed="lenta"]');
+    assert.equal(await page.getAttribute('[data-speed="lenta"]', 'aria-checked'), 'true');
+    const before = spoken.length;
     await page.click('#btn-play');
-    await page.waitForFunction((n) => window.__spoken.length > n, before);
+    await page.waitForFunction((n) => window.__spoken.length > n + 1, before);
+    spoken = await page.evaluate(() => window.__spoken);
+    assert.ok(spoken[spoken.length - 1].rate < 0.85, 'más lenta: ' + spoken[spoken.length - 1].rate);
     await page.click('#btn-stop');
     assert.equal(await page.locator('#btn-stop').isDisabled(), true);
-    const spoken = await page.evaluate(() => window.__spoken);
-    assert.ok(spoken.length >= 2);
-    assert.ok(spoken.every((u) => u.lang === 'es-AR' && u.voice === 'Español Argentina'), 'usa la voz en español');
-    assert.match(spoken.map((u) => u.text).join(' '), /Bruno/);
-    assert.ok(spoken.every((u) => !/\p{Extended_Pictographic}/u.test(u.text)), 'no lee emojis');
+    await page.reload();
+    await page.locator('#view-cuento:not([hidden])').waitFor();
+    assert.equal(await page.getAttribute('[data-speed="lenta"]', 'aria-checked'), 'true', 'la velocidad quedó guardada');
     assert.deepEqual(errors, []);
+
+    // Solo una voz básica: se puede escuchar, con un aviso amable.
+    const basic = await openStoryWithVoices(browser, url, [{ name: 'Spanish basic', lang: 'es-ES', voiceURI: 'es-basic' }]);
+    assert.match(await basic.page.locator('#voice-note').innerText(), /voz básica/);
+    assert.equal(await basic.page.locator('#btn-play').isEnabled(), true);
+
+    // Sin voz en español: aviso y botones desactivados.
+    const none = await openStoryWithVoices(browser, url, [{ name: 'English', lang: 'en-US', voiceURI: 'en' }]);
+    await none.page.waitForTimeout(1700);
+    assert.match(await none.page.locator('#voice-note').innerText(), /No encontramos una voz en español/);
+    assert.equal(await none.page.locator('#btn-play').isDisabled(), true);
+    assert.deepEqual(basic.errors.concat(none.errors), []);
   } finally {
     await browser.close();
     server.close();

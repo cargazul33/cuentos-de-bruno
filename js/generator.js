@@ -375,13 +375,14 @@
 
   function nodeSpeech(node) {
     var parts = [];
-    if (node.chapter) parts.push('Capítulo ' + node.chapter + '. ' + node.chapterTitle + '.');
+    if (node.chapter) parts.push({ text: 'Capítulo ' + node.chapter + '. ' + node.chapterTitle + '.', heading: true });
     parts = parts.concat(node.paragraphs);
     if (node.choices.length) {
-      parts.push(node.prompt);
+      parts.push({ text: node.prompt, heading: true });
       node.choices.forEach(function (c, i) { parts.push('Opción ' + (i + 1) + ': ' + c.label + '.'); });
     } else if (node.ending) {
-      parts.push('Fin. ' + node.ending.title + '. Ganaste la insignia ' + node.ending.badge + '.');
+      parts.push({ text: 'Fin.', heading: true });
+      parts.push(node.ending.title + '. Ganaste la insignia ' + node.ending.badge + '.');
     }
     return parts;
   }

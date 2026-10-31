@@ -208,6 +208,15 @@ main { max-width: 760px; margin: 0 auto; padding: 4px 16px 24px; }
 :root[data-theme="claro"] .voice-btn { background: rgba(42,29,74,.06); }
 .voice-btn:disabled { opacity: .4; cursor: default; }
 .voice-btn.on { background: var(--cyan); color: #082a33; }
+.speed-row { flex-basis: 100%; display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.speed-label { font-size: 13px; color: var(--muted); font-weight: 700; margin: 0 2px 0 4px; }
+.speed-btn {
+  flex: 1 1 0; min-width: 0; min-height: 44px; padding: 0 4px; border-radius: 14px;
+  border: 2px solid var(--line); background: transparent; color: var(--text);
+  font-size: 13px; font-weight: 800; white-space: nowrap;
+}
+.speed-btn[aria-checked="true"] { border-color: var(--cyan); background: rgba(72,232,255,.16); }
+.speed-btn:disabled { opacity: .4; cursor: default; }
 .voice-note { flex-basis: 100%; margin: 4px 4px 2px; font-size: 14px; color: var(--muted); }
 
 .page { padding: 20px 18px; margin: 14px 0; }

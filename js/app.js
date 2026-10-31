@@ -8,6 +8,7 @@
   var speech = window.BrunoSpeech.createSpeech(updateVoiceUI);
 
   var settings = store.getSettings();
+  speech.setSpeed(settings.voiceSpeed || 'normal');
   var selected = { world: settings.lastWorld || 'sorpresa', length: settings.lastLength || 'mediano' };
   var current = null; // { story, path: [nodeId...] }
   var libraryFilter = 'todos';
@@ -268,6 +269,7 @@
     var status = speech.status;
     if (!speech.supported) {
       play.disabled = true; pause.disabled = true; stop.disabled = true;
+      setSpeedButtons(true);
       note.hidden = false;
       note.textContent = '🔇 Este dispositivo no puede leer en voz alta, pero el cuento se lee igual de bien con los ojos.';
       return;
@@ -276,9 +278,17 @@
       play.disabled = true; pause.disabled = true; stop.disabled = true;
       note.hidden = false;
       note.textContent = '🔇 No encontramos una voz en español en este dispositivo, así que la lectura en voz alta no está disponible. ¡Podés seguir leyendo el texto!';
+      setSpeedButtons(true);
       return;
     }
-    note.hidden = true;
+    setSpeedButtons(false);
+    if (speech.natural) {
+      note.hidden = true;
+    } else {
+      // Hay voz en español, pero es la básica del dispositivo: se puede usar igual.
+      note.hidden = false;
+      note.textContent = '🗣️ Este dispositivo solo tiene una voz básica en español y puede sonar un poco robótica. Se puede escuchar igual; en Chrome o Edge suele haber voces más naturales.';
+    }
     play.disabled = status === 'playing';
     play.textContent = status === 'paused' ? '▶️ Seguir' : '▶️ Escuchar';
     play.classList.toggle('on', status === 'playing');
@@ -286,11 +296,18 @@
     stop.disabled = status === 'idle';
   }
 
+  function setSpeedButtons(disabled) {
+    $('speed-row').hidden = disabled;
+    Array.prototype.forEach.call(document.querySelectorAll('.speed-btn'), function (b) {
+      b.disabled = disabled;
+      b.setAttribute('aria-checked', b.getAttribute('data-speed') === speech.speed ? 'true' : 'false');
+    });
+  }
+
   function playCurrent() {
     if (!current) return;
     if (speech.status === 'paused') { speech.resume(); return; }
     var node = current.story.nodes[current.path[current.path.length - 1]];
-    speech.setRate(settings.rate || 1);
     speech.play(Gen.nodeSpeech(node));
   }
 
@@ -463,6 +480,15 @@
     $('btn-play').addEventListener('click', playCurrent);
     $('btn-pause').addEventListener('click', function () { speech.pause(); });
     $('btn-stop').addEventListener('click', function () { speech.stop(); });
+    Array.prototype.forEach.call(document.querySelectorAll('.speed-btn'), function (b) {
+      b.addEventListener('click', function () {
+        var s = b.getAttribute('data-speed');
+        speech.setSpeed(s);
+        settings.voiceSpeed = s;
+        store.setSetting('voiceSpeed', s);
+        updateVoiceUI();
+      });
+    });
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) {
       t.addEventListener('click', function () { libraryFilter = t.getAttribute('data-filter'); renderLibrary(); });
     });

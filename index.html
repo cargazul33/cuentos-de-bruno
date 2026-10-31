@@ -124,6 +124,12 @@
         <button class="voice-btn" id="btn-play">▶️ Escuchar</button>
         <button class="voice-btn" id="btn-pause" disabled>⏸️ Pausa</button>
         <button class="voice-btn" id="btn-stop" disabled>⏹️ Parar</button>
+        <div class="speed-row" id="speed-row" role="radiogroup" aria-label="Velocidad de la voz">
+          <span class="speed-label">Velocidad:</span>
+          <button class="speed-btn" role="radio" data-speed="lenta" aria-checked="false">🐢 Lenta</button>
+          <button class="speed-btn" role="radio" data-speed="normal" aria-checked="true">🙂 Normal</button>
+          <button class="speed-btn" role="radio" data-speed="rapida" aria-checked="false">🐇 Rápida</button>
+        </div>
         <p class="voice-note" id="voice-note" hidden></p>
       </div>
       <div id="story-pages"></div>

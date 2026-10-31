@@ -31,7 +31,7 @@
       history: [],
       recent: [],
       stats: { started: 0, finished: 0, choices: 0, worlds: {}, traits: {}, endings: {}, multiverses: 0 },
-      settings: { theme: 'oscuro', fontScale: 1, rate: 1 },
+      settings: { theme: 'oscuro', fontScale: 1, voiceSpeed: 'normal' },
       current: null
     };
   }
@@ -54,7 +54,7 @@
       if (typeof raw.settings.fontScale === 'number') s.settings.fontScale = Math.min(1.6, Math.max(0.85, raw.settings.fontScale));
       if (typeof raw.settings.lastWorld === 'string') s.settings.lastWorld = raw.settings.lastWorld;
       if (typeof raw.settings.lastLength === 'string') s.settings.lastLength = raw.settings.lastLength;
-      if (typeof raw.settings.rate === 'number') s.settings.rate = Math.min(1.4, Math.max(0.7, raw.settings.rate));
+      if (['lenta', 'normal', 'rapida'].indexOf(raw.settings.voiceSpeed) !== -1) s.settings.voiceSpeed = raw.settings.voiceSpeed;
     }
     if (raw.current && raw.current.id && Array.isArray(raw.current.path)) s.current = raw.current;
     return s;

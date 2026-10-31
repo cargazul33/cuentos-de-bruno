@@ -240,14 +240,15 @@ test('todos los mundos, personajes, misiones, desafíos y finales son alcanzable
 test('la lectura en voz alta arma el texto del nodo con las opciones', () => {
   const s = Gen.generateStory({ worldId: 'hongos', length: 'largo', seed: 'voz' });
   const parts = Gen.nodeSpeech(s.nodes.r);
-  assert.match(parts[0], /^Capítulo 1/);
+  assert.deepEqual(parts[0], { text: 'Capítulo 1. ' + s.nodes.r.chapterTitle + '.', heading: true });
   assert.match(parts[parts.length - 1], /^Opción \d: /);
   const Speech = require('../js/speech.js');
   const chunks = Speech.chunk(parts);
   assert.ok(chunks.length >= parts.length);
+  assert.equal(chunks[0].pause, Speech.PAUSE.heading, 'pausa larga después del título del capítulo');
   for (const c of chunks) {
-    assert.ok(c.length <= 400);
-    assert.doesNotMatch(c, /\p{Extended_Pictographic}/u, 'sin emojis en la voz');
+    assert.ok(c.text.length <= 230);
+    assert.doesNotMatch(c.text, /\p{Extended_Pictographic}/u, 'sin emojis en la voz');
   }
 });
 

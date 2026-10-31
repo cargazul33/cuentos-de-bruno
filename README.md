@@ -5,7 +5,7 @@ Cuentos interactivos en español donde **Bruno (10 años) es siempre el protagon
 - Cada cuento es nuevo: se arma en el momento, en el dispositivo, combinando mundo, misión, objeto mágico, giro, desafíos y final.
 - En 2 o 3 momentos la historia se detiene y Bruno elige qué hacer. Cada elección cambia lo que sigue y lleva a finales distintos.
 - Cada final deja una enseñanza contada dentro de la aventura (valentía, amistad, ingenio, honestidad o trabajo en equipo) y una insignia.
-- Lectura en voz alta con la voz en español del dispositivo (si no hay voz en español, la app lo avisa y se sigue leyendo el texto).
+- Lectura en voz alta con la mejor voz en español del dispositivo: prefiere las voces naturales o neurales (Google, Microsoft «Natural», Apple «Mejorada»/«Premium»), y entre ellas es-419, es-MX y es-US antes que es-ES. Lee oración por oración, con ritmo de narrador (velocidad 0,93), entonación levemente expresiva y pausas entre oraciones, párrafos y capítulos. Bruno puede elegir la velocidad: lenta, normal o rápida (queda guardada). Si el dispositivo solo tiene una voz básica, la app avisa con amabilidad; si no tiene ninguna en español, avisa y se sigue leyendo el texto.
 - Mis cuentos (historial y favoritos) y Logros, guardados solo en el dispositivo (localStorage).
 - PWA instalable que funciona sin conexión después de la primera visita.
 - HTML, CSS y JavaScript sin dependencias, sin servidor, sin claves y sin publicidad.
@@ -39,7 +39,7 @@ Todo el contenido está en `js/data.js`. Para agregar una misión, un desafío o
 | `js/data.js` | Mundos, personajes, misiones, desafíos y textos (todo original) |
 | `js/generator.js` | Generador de cuentos con semilla |
 | `js/storage.js` | Historial, favoritos, logros y ajustes en localStorage |
-| `js/speech.js` | Lectura en voz alta (Web Speech API) |
+| `js/speech.js` | Lectura en voz alta (Web Speech API): elección de voz, ritmo y pausas |
 | `js/app.js` | Interfaz y navegación |
 | `sw.js` | Service worker con caché versionada (funciona sin conexión) |
 | `manifest.webmanifest` | Manifest de la PWA (rutas relativas) |

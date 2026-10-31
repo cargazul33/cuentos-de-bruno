@@ -2,7 +2,7 @@
  * Precarga todo (la app no necesita internet: los cuentos se generan en el dispositivo).
  * Las rutas son relativas a este archivo, así funciona en /cuentos-de-bruno/ o en la raíz.
  * Para publicar cambios, subí el número de VERSION. */
-var VERSION = 'v1.0.0';
+var VERSION = 'v1.1.0';
 var CACHE = 'multiversos-bruno-' + VERSION;
 var ASSETS = [
   './',
