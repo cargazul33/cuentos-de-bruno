@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Los Multiversos de Bruno</title>
+  <meta name="description" content="Cuentos interactivos donde Bruno es el héroe: Mario, Sonic, Pinocho, el Chavo, Popeye, Amy, Perlita y portales al multiverso.">
+  <meta name="theme-color" content="#120e33">
+  <meta name="color-scheme" content="dark light">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bruno">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="sky" aria-hidden="true"><div class="stars s1"></div><div class="stars s2"></div></div>
+
+  <header class="topbar">
+    <a class="brand" href="#/inicio" aria-label="Ir al inicio">
+      <span class="brand-portal" aria-hidden="true"></span>
+      <span class="brand-text">Los Multiversos<br><strong>de Bruno</strong></span>
+    </a>
+    <div class="top-actions">
+      <button id="btn-install" class="chip-btn" hidden>📲 Instalar</button>
+      <button id="btn-theme" class="icon-btn" aria-label="Cambiar a modo claro" title="Modo claro / oscuro">☀️</button>
+    </div>
+  </header>
+
+  <main id="app">
+    <!-- INICIO -->
+    <section id="view-inicio" class="view" aria-labelledby="hola">
+      <div class="hero card">
+        <svg class="hero-art" viewBox="0 0 320 200" role="img" aria-label="Bruno con Perlita y el martillo de Amy frente a un portal">
+          <defs>
+            <radialGradient id="portalG" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="35%" stop-color="#7cf6ff"/>
+              <stop offset="70%" stop-color="#9b6bff"/>
+              <stop offset="100%" stop-color="#ff5fa2" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="pearlG" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="55%" stop-color="#f1e6ff"/>
+              <stop offset="100%" stop-color="#c3a6ff"/>
+            </radialGradient>
+          </defs>
+          <circle class="portal-spin" cx="230" cy="92" r="78" fill="url(#portalG)" opacity=".9"/>
+          <g class="portal-spin" opacity=".55" fill="none" stroke="#fff" stroke-width="2">
+            <path d="M230 30 a62 62 0 0 1 0 124"/><path d="M230 52 a40 40 0 0 0 0 80"/><path d="M230 70 a22 22 0 0 1 0 44"/>
+          </g>
+          <!-- Bruno (personaje original) -->
+          <g transform="translate(70 40)">
+            <ellipse cx="45" cy="150" rx="40" ry="7" fill="#000" opacity=".25"/>
+            <rect x="22" y="78" width="46" height="52" rx="16" fill="#ff4d6d"/>
+            <path d="M45 92 l5 10 11 1 -8 7 3 11 -11 -6 -10 6 3 -11 -8 -7 11 -1z" fill="#ffd23f"/>
+            <rect x="26" y="126" width="15" height="22" rx="6" fill="#2f3b8f"/>
+            <rect x="49" y="126" width="15" height="22" rx="6" fill="#2f3b8f"/>
+            <rect x="8" y="84" width="16" height="36" rx="8" fill="#ffcfa3" transform="rotate(18 16 86)"/>
+            <rect x="66" y="80" width="16" height="36" rx="8" fill="#ffcfa3" transform="rotate(-40 74 82)"/>
+            <circle cx="45" cy="50" r="32" fill="#ffcfa3"/>
+            <path d="M14 46 q2 -34 34 -32 q28 2 30 28 l-8 -6 -6 8 -6 -10 -8 8 -6 -10 -8 9 -6 -9 -8 8z" fill="#5a3418"/>
+            <circle cx="34" cy="52" r="5" fill="#2a1d4a"/><circle cx="56" cy="52" r="5" fill="#2a1d4a"/>
+            <circle cx="35.5" cy="50.5" r="1.6" fill="#fff"/><circle cx="57.5" cy="50.5" r="1.6" fill="#fff"/>
+            <path d="M33 64 q12 12 24 0" fill="none" stroke="#2a1d4a" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="25" cy="62" r="4" fill="#ff8fa3" opacity=".7"/><circle cx="65" cy="62" r="4" fill="#ff8fa3" opacity=".7"/>
+          </g>
+          <!-- Perlita (personaje original): una perla guardiana -->
+          <g transform="translate(175 40)"><g class="float">
+            <circle cx="0" cy="0" r="18" fill="url(#pearlG)"/>
+            <circle cx="-6" cy="-1" r="2.6" fill="#2a1d4a"/><circle cx="6" cy="-1" r="2.6" fill="#2a1d4a"/>
+            <path d="M-5 6 q5 5 10 0" fill="none" stroke="#2a1d4a" stroke-width="2" stroke-linecap="round"/>
+            <path d="M-26 -14 l3 -7 3 7 7 3 -7 3 -3 7 -3 -7 -7 -3z" fill="#ffd23f"/>
+            <path d="M22 12 l2 -5 2 5 5 2 -5 2 -2 5 -2 -5 -5 -2z" fill="#7cf6ff"/>
+          </g></g>
+          <!-- El martillo de Amy -->
+          <g transform="translate(268 150) rotate(-25)"><g class="float2">
+            <rect x="-4" y="-6" width="8" height="40" rx="3" fill="#ffd23f"/>
+            <rect x="-20" y="-24" width="40" height="22" rx="7" fill="#ff5fa2"/>
+            <rect x="-20" y="-24" width="8" height="22" rx="3" fill="#ffd23f"/>
+            <rect x="12" y="-24" width="8" height="22" rx="3" fill="#ffd23f"/>
+          </g></g>
+        </svg>
+        <div class="hero-text">
+          <h1 id="hola">¡Hola, Bruno!</h1>
+          <p>Cada cuento es nuevo y el héroe sos vos. Con Amy y Perlita, viajá por los mundos y decidí qué pasa.</p>
+          <p class="hero-stats" id="hero-stats"></p>
+        </div>
+      </div>
+
+      <h2 class="step"><span class="step-n">1</span> Elegí tu mundo</h2>
+      <div class="world-grid" id="world-grid" role="radiogroup" aria-label="Mundos"></div>
+
+      <h2 class="step"><span class="step-n">2</span> ¿Qué tan largo?</h2>
+      <div class="length-row" id="length-row" role="radiogroup" aria-label="Largo del cuento"></div>
+
+      <button id="btn-create" class="big-btn">✨ ¡Crear mi cuento!</button>
+
+      <h2 class="step small">Tu equipo</h2>
+      <div class="team">
+        <div class="card team-card"><span class="team-emoji" aria-hidden="true">🧒</span><div><strong>Bruno</strong><p>10 años, ideas brillantes y corazón de héroe. Siempre es el que encuentra la salida.</p></div></div>
+        <div class="card team-card"><span class="team-emoji" aria-hidden="true">🔨</span><div><strong>Amy</strong><p>Valiente, rapidísima y con su martillo siempre listo. Primero actúa y después pregunta (a veces).</p></div></div>
+        <div class="card team-card"><span class="team-emoji" aria-hidden="true">🫧</span><div><strong>Perlita</strong><p>La guardiana de las perlas-portal. Curiosa, cuidadosa y llena de datos rarísimos del multiverso.</p></div></div>
+      </div>
+      <p class="foot">App familiar, gratis y sin publicidad. Funciona sin internet una vez abierta. Los personajes conocidos pertenecen a sus creadores; estas historias son originales y hechas con cariño para Bruno.</p>
+    </section>
+
+    <!-- CUENTO -->
+    <section id="view-cuento" class="view" hidden aria-live="polite">
+      <div class="story-toolbar">
+        <button class="icon-btn" id="btn-back" aria-label="Volver al inicio">←</button>
+        <div class="story-tools">
+          <button class="icon-btn" id="btn-font-down" aria-label="Letra más chica">A−</button>
+          <button class="icon-btn" id="btn-font-up" aria-label="Letra más grande">A+</button>
+          <button class="icon-btn" id="btn-fav" aria-label="Guardar en favoritos" aria-pressed="false">☆</button>
+        </div>
+      </div>
+      <div class="story-head card" id="story-head"></div>
+      <div class="voice-bar card" id="voice-bar">
+        <button class="voice-btn" id="btn-play">▶️ Escuchar</button>
+        <button class="voice-btn" id="btn-pause" disabled>⏸️ Pausa</button>
+        <button class="voice-btn" id="btn-stop" disabled>⏹️ Parar</button>
+        <p class="voice-note" id="voice-note" hidden></p>
+      </div>
+      <div id="story-pages"></div>
+    </section>
+
+    <!-- MIS CUENTOS -->
+    <section id="view-mis-cuentos" class="view" hidden>
+      <h1 class="view-title">📚 Mis cuentos</h1>
+      <div class="tabs" role="tablist">
+        <button role="tab" class="tab" data-filter="todos" aria-selected="true">Todos</button>
+        <button role="tab" class="tab" data-filter="favoritos" aria-selected="false">⭐ Favoritos</button>
+      </div>
+      <ul class="library" id="library"></ul>
+    </section>
+
+    <!-- LOGROS -->
+    <section id="view-logros" class="view" hidden>
+      <h1 class="view-title">🏆 Mis logros</h1>
+      <div class="stat-row" id="stat-row"></div>
+      <h2 class="step small">Mundos visitados</h2>
+      <div class="visited" id="visited"></div>
+      <h2 class="step small">Insignias de cada final</h2>
+      <div class="badges" id="badges"></div>
+      <h2 class="step small">Logros</h2>
+      <ul class="achievements" id="achievements"></ul>
+      <p class="foot">Los logros son solo tuyos: no hay rankings ni competencia. ¡Cada cuento suma!</p>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Secciones">
+    <a href="#/inicio" data-view="inicio"><span aria-hidden="true">🏠</span>Inicio</a>
+    <a href="#/mis-cuentos" data-view="mis-cuentos"><span aria-hidden="true">📚</span>Mis cuentos</a>
+    <a href="#/logros" data-view="logros"><span aria-hidden="true">🏆</span>Logros</a>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/generator.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/speech.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

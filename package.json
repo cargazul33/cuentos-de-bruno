@@ -1,0 +1,17 @@
+{
+  "name": "cuentos-de-bruno",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Los Multiversos de Bruno: cuentos interactivos donde Bruno es el héroe. PWA en español, sin backend ni dependencias.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "node --test tests/generator.test.js tests/storage.test.js tests/pwa.test.js",
+    "test:e2e": "node --test tests/e2e/browser.e2e.js",
+    "test:all": "npm test && npm run test:e2e",
+    "serve": "node tools/serve.js 8080",
+    "icons": "node tools/make-icons.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
